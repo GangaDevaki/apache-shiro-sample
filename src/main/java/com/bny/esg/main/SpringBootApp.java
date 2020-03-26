@@ -72,7 +72,7 @@ public class SpringBootApp {
     public Realm realm() {
 
         CustomRealm realm = new CustomRealm();
-        realm.setCachingEnabled(true);
+        //realm.setCachingEnabled(true);
         return realm;
     }   
    
