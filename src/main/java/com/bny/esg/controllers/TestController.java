@@ -8,16 +8,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/test")
-public class TestController {    
-
+public class TestController {
+	
     @RequestMapping(method = RequestMethod.GET, value = "/djkhaleed")
-    public String getTest() {        
+    public String getTest() {
         return "BLESS UP!";
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/anotherone")
     public String getAdUnit() {
-        
         return "Another One";
     }
 }

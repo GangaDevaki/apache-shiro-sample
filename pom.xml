@@ -80,7 +80,17 @@
             <version>${shiro.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>1.4.1</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-ehcache</artifactId>
+            <version>1.4.1</version>
+        </dependency>
 
         <!-- Spring -->
         <dependency>
@@ -107,9 +117,9 @@
 		</dependency>
 
 		<dependency>
-			<!-- Use MySQL Connector-J -->
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 
         <dependency>

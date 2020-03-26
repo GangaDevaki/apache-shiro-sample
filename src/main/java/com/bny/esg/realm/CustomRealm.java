@@ -8,27 +8,34 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
-import com.bny.esg.model.User;
+import com.bny.esg.entity.User;
+import com.bny.esg.service.UserService;
 
-public class CustomRealm extends AuthorizingRealm { 
-	    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException { 
-	        try { 
-	            // My custom logic here 
+public class CustomRealm extends AuthorizingRealm {
+	
+    @Autowired
+	private UserService userService;
 
-	        } catch(Throwable t) { 
-	            System.out.println(t.getMessage()); 
-	        } 
-	        SimpleAuthenticationInfo authn = new SimpleAuthenticationInfo();
-	        return authn;
-	    } 
-
-	    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) { 
-	        try { 
-	            // My custom logic here 
-	        } catch(Throwable t) { 
-	            System.out.println(t.getMessage()); 
-	        }
-	        return new SimpleAuthorizationInfo();
-	    } 
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+		String username = (String) token.getPrincipal();
+		User user = userService.getUserByName(username);
+		if (StringUtils.isEmpty(user)) {
+			return null;
+		}
+		return new SimpleAuthenticationInfo(user, user.getPassword(), getName());
 	}
+
+	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+			SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+			User user = (User) principals.getPrimaryPrincipal();
+			//String role = user.getRole();
+			authorizationInfo.addRole("admin");
+/*			for (Permission permission : permissionService.getByRoleId(role)) {
+				authorizationInfo.addStringPermission(permission.getPermission());
+			}*/
+			return authorizationInfo;
+	}
+}

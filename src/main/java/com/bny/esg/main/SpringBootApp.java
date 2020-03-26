@@ -1,20 +1,14 @@
 package com.bny.esg.main;
 
-import com.bny.esg.controllers.NotFoundException;
-import com.bny.esg.dto.DefaultUserDao;
-import com.bny.esg.dto.UserDao;
-import com.bny.esg.filter.JWTVerifyingFilter;
-import com.bny.esg.model.ErrorMessage;
-
 import java.util.Map;
+
 import javax.servlet.Filter;
+
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.realm.Realm;
-import org.apache.shiro.realm.jdbc.JdbcRealm;
-import org.apache.shiro.realm.text.PropertiesRealm;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
@@ -22,17 +16,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ControllerAdvice
+import com.bny.esg.controllers.NotFoundException;
+import com.bny.esg.filter.JWTVerifyingFilter;
+import com.bny.esg.model.ErrorMessage;
+import com.bny.esg.realm.CustomRealm;
+import com.bny.esg.repository.UserRepository;
+import com.bny.esg.service.UserService;
+
 @SpringBootApplication
+@EnableAutoConfiguration
+@ComponentScan("com.bny.esg")
+@EntityScan("com.bny.esg.entity")
+@EnableJpaRepositories(basePackageClasses = UserRepository.class)
 public class SpringBootApp {
 
     private static Logger log = LoggerFactory.getLogger(SpringBootApp.class);
@@ -58,25 +65,17 @@ public class SpringBootApp {
     public @ResponseBody
     ErrorMessage handleException(NotFoundException e) {
         String id = e.getMessage();
-        return new ErrorMessage("Trooper Not Found: " + id + ", why aren't you at your post? " + id + ", do you copy?");
-    }
-
-    @Bean
-    protected UserDao userDao() {
-        return new DefaultUserDao();
+        return new ErrorMessage("User Not Found: " + id + ", why aren't you at your post? " + id + ", do you copy?");
     }
 
     @Bean
     public Realm realm() {
 
-        // uses JDBC by default
-        JdbcRealm realm = new JdbcRealm();
-
-        // Caching isn't needed in this example, but we can still turn it on
+        CustomRealm realm = new CustomRealm();
         realm.setCachingEnabled(true);
         return realm;
-    }
-
+    }   
+   
     @Bean
     public Filter jwtv() {
         return new JWTVerifyingFilter();
@@ -91,7 +90,7 @@ public class SpringBootApp {
     }
 
     @Bean
-    public ShiroFilterFactoryBean shiroFilterFactoryBean(@Value("#{ @environment['shiro.loginUrl'] ?: '/login.jsp' }") String loginUrl,
+    public ShiroFilterFactoryBean shiroFilterFactoryBean(@Value("#{ @environment['shiro.loginUrl'] ?: '/login.html' }") String loginUrl,
             @Value("#{ @environment['shiro.successUrl'] ?: '/' }") String successUrl,
             @Value("#{ @environment['shiro.unauthorizedUrl'] ?: null }") String unauthorizedUrl,
             org.apache.shiro.mgt.SecurityManager securityManager,
@@ -123,7 +122,6 @@ public class SpringBootApp {
 
     @Bean
     public CacheManager cacheManager() {
-        // Caching isn't needed in this example, but we will use the MemoryConstrainedCacheManager for this example.
         return new MemoryConstrainedCacheManager();
     }
 
