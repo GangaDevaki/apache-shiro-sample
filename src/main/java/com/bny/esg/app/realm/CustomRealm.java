@@ -1,4 +1,4 @@
-package com.bny.esg.realm;
+package com.bny.esg.app.realm;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -11,8 +11,8 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
-import com.bny.esg.entity.User;
-import com.bny.esg.service.UserService;
+import com.bny.esg.app.entity.User;
+import com.bny.esg.app.service.UserService;
 
 public class CustomRealm extends AuthorizingRealm {
 	

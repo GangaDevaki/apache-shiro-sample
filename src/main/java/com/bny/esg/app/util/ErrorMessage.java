@@ -1,4 +1,4 @@
-package com.bny.esg.model;
+package com.bny.esg.app.util;
 
 public class ErrorMessage {
 

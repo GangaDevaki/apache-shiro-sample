@@ -1,12 +1,12 @@
-package com.bny.esg.service;
+package com.bny.esg.app.service;
 
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bny.esg.entity.User;
-import com.bny.esg.repository.UserRepository;
+import com.bny.esg.app.entity.User;
+import com.bny.esg.app.repository.UserRepository;
 
 @Service
 public class UserService {
@@ -14,7 +14,7 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	public User getUser(String id) {
+	public User getUser(Long id) {
 		return userRepository.findById(id);
 	}
 	

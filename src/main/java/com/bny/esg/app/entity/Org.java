@@ -1,4 +1,4 @@
-package com.bny.esg.entity;
+package com.bny.esg.app.entity;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.bny.esg.entity;
+package com.bny.esg.app.entity;
 
 import lombok.Data;
 
@@ -7,15 +7,16 @@ import javax.persistence.*;
 
 @Data
 @Entity
-public class UserOrgRole {
+public class Role {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
-    private Long userId;
+    @Column(unique =true)
+    private String roleCode;
 
-    private Long roleId;
+    private String roleName;
 
 
 }

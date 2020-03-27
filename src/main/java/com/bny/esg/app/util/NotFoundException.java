@@ -1,4 +1,4 @@
-package com.bny.esg.controllers;
+package com.bny.esg.app.util;
 
 public class NotFoundException extends Exception {
 
